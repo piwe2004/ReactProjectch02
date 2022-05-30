@@ -25,12 +25,40 @@ class TodoList{
     onClickTodoList(e){
         const {target} = e;
         const btn = target.closest('button');
+        if(!btn) return;
         if(btn.matches('#delete-btn')){
-            this.deleteTOdo(target);
+            this.deleteTodo(target);
+        } else if (btn.matches('#edit-btn')){
+            this.editTodo(target);
+        } else if(btn.matches('#save-btn')){
+            this.saveTodo(target);
+        } else if(btn.matches('#complete-btn')){
+            this.completeTodo(target);
         }
     }
 
-    deleteTOdo(target){
+    completeTodo(target){
+        const todoDiv = target.closest('.todo');
+        todoDiv.classList.toggle('done');
+
+    }
+
+    saveTodo(target){
+        const todoDiv = target.closest('.todo');
+        todoDiv.classList.remove('edit');
+        const todoInputEl = todoDiv.querySelector('input');
+        todoInputEl.readOnly = true;
+    }
+
+    editTodo(target){
+        const todoDiv = target.closest('.todo');
+        const todoInputEl = todoDiv.querySelector('input');
+        todoInputEl.readOnly = false;
+        todoInputEl.focus();
+        todoDiv.classList.add('edit');
+    }
+
+    deleteTodo(target){
         const todoDiv = target.closest('.todo');
         todoDiv.addEventListener('transitionend', () => {
             todoDiv.remove();
